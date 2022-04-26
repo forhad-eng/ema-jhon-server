@@ -16,26 +16,20 @@ async function run() {
         await client.connect()
         const productCollection = client.db('emaJhon').collection('product')
 
-        // app.get('/product', async (req, res) => {
-        //     const page = parseInt(req.query.page)
-        //     const size = parseInt(req.query.size)
-        //     const cursor = productCollection.find({})
-        //     let products
-        //     if (page || size) {
-        //         products = await cursor
-        //             .skip(page * size)
-        //             .limit(size)
-        //             .toArray()
-        //     } else {
-        //         products = await cursor.toArray()
-        //     }
-        //     res.send(products)
-        // })
-
         app.get('/product', async (req, res) => {
+            const page = parseInt(req.query.page)
+            const size = parseInt(req.query.size)
             const cursor = productCollection.find({})
-            const result = await cursor.toArray()
-            res.send(result)
+            let products
+            if (page || size) {
+                products = await cursor
+                    .skip(page * size)
+                    .limit(size)
+                    .toArray()
+            } else {
+                products = await cursor.toArray()
+            }
+            res.send(products)
         })
 
         app.get('/productCount', async (req, res) => {
